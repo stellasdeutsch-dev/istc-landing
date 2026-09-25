@@ -16,9 +16,11 @@
 <link rel="stylesheet" href="../assets/css/style.css">
 <script defer src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
 <script defer src="../assets/js/main.js"></script>
+<script defer src="../assets/js/wizard.js"></script>
 <script defer src="../assets/js/projects.js"></script>
 </head>
 <body>
+<div class="progress" aria-hidden="true"></div>
 
 <header class="hdr on-dark">
   <div class="wrap">
@@ -88,44 +90,40 @@
 <section class="sec light" id="route">
   <div class="wrap">
     <div class="sec-head center narrow" style="margin-left:auto;margin-right:auto">
-      <p class="eyebrow rv">How a project works</p>
+      <p class="eyebrow rv">How a project works · scroll</p>
       <h2 class="h2 rv">The route to the summit <span class="hl">takes 8 stages</span></h2>
-      <p class="lead rv">Dates below are from the 2026 Call for Joint Research Proposals. Other calls follow the same logic.</p>
+      <p class="lead rv">Scroll and climb. Dates are from the 2026 Call.</p>
     </div>
-    <div class="route">
-      <div class="fill"></div>
-      <article class="stop rv"><div class="card"><span class="vtab o">Base camp</span>
-        <h3>Build your team</h3>
-        <p>A leading institute in an ISTC member country plus foreign collaborators. In the 2026 Call: at least one group from Armenia, Georgia, Kazakhstan, Kyrgyzstan or Tajikistan and one from Japan.</p>
-        <div class="res"><b>You leave with</b><p>A consortium — and one person who is both Project Manager and principal investigator.</p></div></div></article>
-      <article class="stop rv"><div class="card"><span class="vtab">Stage 1</span>
-        <h3>Summary proposal</h3>
-        <p>A short proposal plus concurrence letters from the participating institutes. 2026 Call: 25 April – 30 May.</p>
-        <div class="res"><b>You leave with</b><p>An initial screening result. Announced 7–10 July.</p></div></div></article>
-      <article class="stop rv"><div class="card"><span class="vtab">Stage 2</span>
-        <h3>Full proposal</h3>
-        <p>The complete plan plus a Letter of Expression of Interest from the Japanese collaborator. 2026 Call: 10 July – 20 August.</p>
-        <div class="res"><b>You leave with</b><p>Goals, tasks and a budget — up to $250,000 for up to three years.</p></div></div></article>
-      <article class="stop rv"><div class="card"><span class="vtab">Stage 3</span>
-        <h3>Peer review</h3>
-        <p>Independent experts review the science. Then the Scientific Advisory Committee gives its evaluation.</p>
-        <div class="res"><b>You leave with</b><p>A shortlist. Shortlisted teams collect Host Government Concurrence letters.</p></div></div></article>
-      <article class="stop rv"><div class="card"><span class="vtab o">Stage 4</span>
-        <h3>Governing Board decision</h3>
-        <p>The Board approves projects by consensus. For the 2026 Call it meets in December 2026.</p>
-        <div class="res"><b>You leave with</b><p>A written decision. Projects start no earlier than January 2027.</p></div></div></article>
-      <article class="stop rv"><div class="card"><span class="vtab">Stage 5</span>
-        <h3>Agreement &amp; Work Plan</h3>
-        <p>ISTC and the institute sign a Project Agreement based on the Model Project Agreement. The Work Plan is its annex — a free WP Validator checks it against ISTC rules.</p>
-        <div class="res"><b>You leave with</b><p>Clear tasks, deliverables and rights, including intellectual property.</p></div></div></article>
-      <article class="stop rv"><div class="card"><span class="vtab">Stage 6</span>
-        <h3>The climb</h3>
-        <p>Grants go to team members, ISTC buys the equipment, and the team files quarterly financial reports and timesheets. Travel to collaborators is supported.</p>
-        <div class="res"><b>You leave with</b><p>Results — with ISTC staff monitoring the work at every stage.</p></div></div></article>
-      <article class="stop rv"><div class="card"><span class="vtab o">Summit</span>
-        <h3>Results that last</h3>
-        <p>New IP is recorded and reported. A Technology Implementation Plan helps the team “graduate” to new funding: industry contacts, market intelligence, patent support and business training.</p>
-        <div class="res"><b>You leave with</b><p>A team that keeps working after the grant ends.</p></div></div></article>
+    <div class="sc" data-scrolly id="climb">
+      <div class="sc-stage">
+        <div class="mtn" aria-hidden="true">
+          <img src="../assets/img/hero-far.svg" alt="">
+          <img src="../assets/img/hero-main.svg" alt="">
+          <svg viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMax slice">
+            <defs><mask id="climbMask" maskUnits="userSpaceOnUse" x="0" y="0" width="1600" height="1000"><path class="rt-fill" pathLength="100" d="M520,960 L700,850 L680,740 L820,650 L850,550 L950,460 L1010,350 L1120,196"/></mask></defs>
+            <path class="rt-base" d="M520,960 L700,850 L680,740 L820,650 L850,550 L950,460 L1010,350 L1120,196"/>
+            <path class="rt-dash" mask="url(#climbMask)" d="M520,960 L700,850 L680,740 L820,650 L850,550 L950,460 L1010,350 L1120,196"/>
+            <g class="wp" data-k="0"><line x1="520" y1="960" x2="520" y2="902"/><path d="M522,903 L564,914 L522,925 Z"/><circle cx="520" cy="960" r="9"/><text x="538" y="990" text-anchor="start">1</text></g><g class="wp" data-k="1"><line x1="700" y1="850" x2="700" y2="792"/><path d="M702,793 L744,804 L702,815 Z"/><circle cx="700" cy="850" r="9"/><text x="666" y="880" text-anchor="end">2</text></g><g class="wp" data-k="2"><line x1="680" y1="740" x2="680" y2="682"/><path d="M682,683 L724,694 L682,705 Z"/><circle cx="680" cy="740" r="9"/><text x="698" y="770" text-anchor="start">3</text></g><g class="wp" data-k="3"><line x1="820" y1="650" x2="820" y2="592"/><path d="M822,593 L864,604 L822,615 Z"/><circle cx="820" cy="650" r="9"/><text x="786" y="680" text-anchor="end">4</text></g><g class="wp" data-k="4"><line x1="850" y1="550" x2="850" y2="492"/><path d="M852,493 L894,504 L852,515 Z"/><circle cx="850" cy="550" r="9"/><text x="868" y="580" text-anchor="start">5</text></g><g class="wp" data-k="5"><line x1="950" y1="460" x2="950" y2="402"/><path d="M952,403 L994,414 L952,425 Z"/><circle cx="950" cy="460" r="9"/><text x="916" y="490" text-anchor="end">6</text></g><g class="wp" data-k="6"><line x1="1010" y1="350" x2="1010" y2="292"/><path d="M1012,293 L1054,304 L1012,315 Z"/><circle cx="1010" cy="350" r="9"/><text x="1028" y="380" text-anchor="start">7</text></g><g class="wp" data-k="7"><line x1="1120" y1="196" x2="1120" y2="138"/><path d="M1122,139 L1164,150 L1122,161 Z"/><circle cx="1120" cy="196" r="9"/><text x="1086" y="226" text-anchor="end">8</text></g>
+            <g class="hiker" style="transform:translate(520px,960px)"><g class="bodyg"><g transform="translate(-20,-80) scale(.66)" fill="#152538" stroke="#152538" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="31" cy="11" r="8" stroke="none"/><path d="M22 6 Q31 -2 40 6 L42 9 L21 9 Z" stroke="none" fill="#FF6600"/><rect x="11" y="22" width="17" height="33" rx="6" stroke="none" fill="#FF6600"/>
+<path d="M22 22 L40 22 L41 58 L24 58 Z" stroke-width="3"/><path d="M28 57 L22 88 L24 118" fill="none" stroke-width="9"/><path d="M36 57 L44 87 L50 116" fill="none" stroke-width="9"/>
+<path d="M39 26 L47 44 L50 52" fill="none" stroke-width="6"/><path d="M24 26 L19 42 L14 50" fill="none" stroke-width="6"/><path d="M50 50 L58 119" fill="none" stroke-width="2.4"/><path d="M14 48 L4 119" fill="none" stroke-width="2.4"/></g></g></g>
+          </svg>
+          <div class="hud"><div class="stg"><small>Stage <span class="k">1</span> / 8</small><b><span class="nm">Build your team</span></b></div><div class="alt"><b class="pc">0%</b><small>to summit</small></div></div>
+          <div class="when"></div>
+        </div>
+        <div class="sc-dots"></div>
+      </div>
+      <div class="sc-steps">
+        <div class="sc-step" data-when="" data-name="Build your team"><div class="card"><span class="num">BASE CAMP · 1 / 8</span><h3>Build your team</h3><p>A lead institute in an ISTC member country plus foreign partners. 2026: a Japanese group is required.</p><div class="res"><b>You leave with</b><p>One Project Manager who is also the PI.</p></div></div></div>
+        <div class="sc-step" data-when="25 Apr – 30 May 2026" data-name="Summary proposal"><div class="card"><span class="num">STAGE 1 · 2 / 8</span><h3>Summary proposal</h3><p>Short proposal plus institute concurrence letters.</p><div class="res"><b>You leave with</b><p>Screening results in July.</p></div><span class="tagd">25 Apr – 30 May 2026</span></div></div>
+        <div class="sc-step" data-when="10 Jul – 20 Aug 2026" data-name="Full proposal"><div class="card"><span class="num">STAGE 2 · 3 / 8</span><h3>Full proposal</h3><p>Full plan plus a letter of interest from the Japanese partner.</p><div class="res"><b>You leave with</b><p>Budget up to $250,000 for up to 3 years.</p></div><span class="tagd">10 Jul – 20 Aug 2026</span></div></div>
+        <div class="sc-step" data-when="Now" data-name="Peer review"><div class="card"><span class="num">STAGE 3 · 4 / 8</span><h3>Peer review</h3><p>Independent experts, then the Scientific Advisory Committee.</p><div class="res"><b>You leave with</b><p>Shortlisted teams get host-government letters.</p></div><span class="tagd">Now</span></div></div>
+        <div class="sc-step" data-when="December 2026" data-name="Board decision"><div class="card"><span class="num">STAGE 4 · 5 / 8</span><h3>Board decision</h3><p>The Governing Board approves by consensus.</p><div class="res"><b>You leave with</b><p>A written decision.</p></div><span class="tagd">December 2026</span></div></div>
+        <div class="sc-step" data-when="" data-name="Agreement & Work Plan"><div class="card"><span class="num">STAGE 5 · 6 / 8</span><h3>Agreement & Work Plan</h3><p>Project Agreement + Work Plan, checked by the WP Validator.</p><div class="res"><b>You leave with</b><p>Clear tasks, deliverables and IP rights.</p></div></div></div>
+        <div class="sc-step" data-when="From January 2027" data-name="The climb"><div class="card"><span class="num">STAGE 6 · 7 / 8</span><h3>The climb</h3><p>Grants, equipment, travel. Quarterly reports and timesheets.</p><div class="res"><b>You leave with</b><p>Results, monitored by ISTC.</p></div><span class="tagd">From January 2027</span></div></div>
+        <div class="sc-step" data-when="" data-name="Results that last"><div class="card"><span class="num">SUMMIT · 8 / 8</span><h3>Results that last</h3><p>New IP recorded. A Technology Implementation Plan helps the team find new funding.</p><div class="res"><b>You leave with</b><p>A team that keeps going.</p></div></div></div>
+      </div>
     </div>
     <p class="src" style="text-align:center">Sources: <a href="https://www.istc.int/apply-for-reseach-grants" target="_blank" rel="noopener">Call for Joint Research Proposals</a>, <a href="https://www.istc.int/FAQ" target="_blank" rel="noopener">FAQ</a>, <a href="https://www.istc.int/project-development-and-execution" target="_blank" rel="noopener">Project development and execution</a>.</p>
   </div>
@@ -458,6 +456,14 @@
           <div class="step"><span class="dot"><i data-lucide="flag"></i></span><div><small>January 2027 or later</small><b>Projects start</b></div></div>
         </div>
       </div>
+    </div>
+    <div class="wiz-wrap">
+      <div>
+        <p class="eyebrow rv">Interactive · 5 steps</p>
+        <h3 class="h2 rv" style="font-size:clamp(28px,7vw,48px)">Is your idea <span class="hl">ready?</span></h3>
+        <p class="lead rv">Check it against the 2026 Call rules in one minute. Unofficial self-check — the <a href="https://www.istc.int/files/ISTC%20Call%20for%20Joint%20Research%20Proposal%202026_guidelines.pdf" target="_blank" rel="noopener">Guidelines</a> decide.</p>
+      </div>
+      <div class="rv s" data-wiz="elig"></div>
     </div>
     <p class="src">Source: <a href="https://www.istc.int/apply-for-reseach-grants" target="_blank" rel="noopener">istc.int/apply-for-reseach-grants</a>. Questions: <a href="mailto:portal@istc.int">portal@istc.int</a>.</p>
   </div>

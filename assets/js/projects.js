@@ -195,3 +195,85 @@
     });
   }
 })();
+
+/* ---------------------------------------------------------------- climb: hiker follows the scroll steps */
+(() => {
+  const sc = document.getElementById('climb');
+  if (!sc) return;
+  const svg = sc.querySelector('.mtn svg'), mtn = sc.querySelector('.mtn');
+  const pts = [...svg.querySelectorAll('.wp circle')].map(c => [+c.getAttribute('cx'), +c.getAttribute('cy')]);
+  const seg = pts.slice(1).map((p, k) => Math.hypot(p[0] - pts[k][0], p[1] - pts[k][1]));
+  const total = seg.reduce((a, b) => a + b, 0);
+  const cum = [0]; seg.forEach(v => cum.push(cum[cum.length - 1] + v / total * 100));
+  const fill = svg.querySelector('.rt-fill'), hiker = svg.querySelector('.hiker');
+  const wps = [...svg.querySelectorAll('.wp')], steps = [...sc.querySelectorAll('.sc-step')];
+  const hud = { k: sc.querySelector('.hud .k'), nm: sc.querySelector('.hud .nm'), pc: sc.querySelector('.hud .pc'), when: sc.querySelector('.when') };
+  let t;
+  const go = i => {
+    const k = i - 1, [x, y] = pts[k];
+    fill.style.strokeDashoffset = (100 - cum[k]).toFixed(2);
+    hiker.style.transform = `translate(${x}px, ${y}px)`;
+    wps.forEach((w, j) => { w.classList.toggle('done', j <= k); w.classList.toggle('cur', j === k); });
+    hud.k.textContent = i;
+    hud.nm.textContent = steps[k].dataset.name;
+    hud.nm.style.animation = 'none'; void hud.nm.offsetWidth; hud.nm.style.animation = '';
+    hud.pc.textContent = `${Math.round(cum[k])}%`;
+    hud.when.textContent = steps[k].dataset.when || '';
+    mtn.classList.add('moving'); clearTimeout(t); t = setTimeout(() => mtn.classList.remove('moving'), 1200);
+  };
+  sc.addEventListener('scrollystep', e => go(e.detail));
+  go(+sc.dataset.step || 1);
+})();
+
+/* ---------------------------------------------------------------- Call 2026 self-check */
+(() => {
+  const el = document.querySelector('[data-wiz="elig"]');
+  if (!el || !window.Wizard) return;
+  const CAC = { Armenia: 'am', Georgia: 'ge', Kazakhstan: 'kz', Kyrgyzstan: 'kg', Tajikistan: 'tj' };
+  const money = v => '$' + v.toLocaleString('en-US');
+  Wizard(el, {
+    title: 'Call self-check',
+    steps: [
+      { key: 'where', q: 'Where is your lead institute?', options: [...Object.entries(CAC).map(([k, f]) => ({ v: k, label: k, flag: f })), { v: 'Other', label: 'Another country', icon: 'globe' }] },
+      { key: 'jp', q: 'Do you have a Japanese research group?', hint: 'ISTC does not match teams with partners.', options: [
+        { v: 'yes', label: 'Yes, a Japanese group is on board', icon: 'check', wide: true },
+        { v: 'more', label: 'Yes — plus a partner from Europe or the US', icon: 'users', wide: true },
+        { v: 'no', label: 'Not yet', icon: 'search', wide: true } ] },
+      { key: 'area', q: 'Which priority does it address?', options: [
+        { v: 'energy', label: 'Energy security', icon: 'zap' }, { v: 'bio', label: 'Biosafety & biosecurity', icon: 'shield-plus' },
+        { v: 'water', label: 'Water safety & security', icon: 'waves' }, { v: 'other', label: 'Something else', icon: 'circle-help' } ] },
+      { key: 'size', type: 'ranges', q: 'How big is the project?', hint: 'Drag the sliders.', ranges: [
+        { key: 'budget', label: 'Budget', min: 50000, max: 400000, step: 10000, value: 200000, limit: 250000, fmt: money, note: 'limit $250,000' },
+        { key: 'months', label: 'Duration', min: 6, max: 48, step: 1, value: 30, limit: 36, fmt: v => `${v} mo`, note: 'limit 36 months' } ] },
+      { key: 'lead', q: 'Who leads it?', options: [
+        { v: 'same', label: 'One person is PI and Project Manager', icon: 'user-check', wide: true },
+        { v: 'split', label: 'PI and Project Manager are different people', icon: 'users', wide: true } ] },
+    ],
+    result(a) {
+      const rules = [
+        [a.where !== 'Other', 'Lead institute in Armenia, Georgia, Kazakhstan, Kyrgyzstan or Tajikistan', 'The lead must be in one of the five countries. You can still join as a foreign collaborator.'],
+        [a.jp !== 'no', 'Japanese research group on board', 'Required. Find one through journals, networks and institute websites.'],
+        [a.area !== 'other', 'Fits a 2026 priority', 'The 2026 Call covered energy security, biosafety & biosecurity, water safety & security.'],
+        [a.budget <= 250000, `Budget ${money(a.budget)}`, `Over the $250,000 limit by ${money(a.budget - 250000)}.`],
+        [a.months <= 36, `${a.months} months`, 'Projects can last up to 3 years (36 months).'],
+        [a.lead === 'same', 'PI is also the Project Manager', 'They must be the same person. Name a separate scientific leader if needed.'],
+      ];
+      const ok = rules.filter(r => r[0]).length, pct = Math.round(ok / rules.length * 100);
+      const extra = [];
+      if (a.jp === 'more') extra.push('Bonus: with equal quality, proposals with a third-country partner get preference.');
+      if (a.budget >= 240000 && a.months < 30) extra.push('Asking for the maximum over a short period needs a clear justification.');
+      const icon = good => `<i data-lucide="${good ? 'circle-check' : 'circle-alert'}"></i>`;
+      return `
+        <div class="res-head">${Wizard.score(pct, `${ok}/${rules.length}`)}<div><h4>${ok === rules.length ? 'Ready for the next call' : `${rules.length - ok} thing${rules.length - ok > 1 ? 's' : ''} to fix`}</h4>
+          <p>The 2026 Call is closed. Use this to prepare for the next one.</p></div></div>
+        <ul class="checks">${rules.map((r, k) => `<li class="${r[0] ? 'ok' : 'no'}" style="--k:${k}">${icon(r[0])}<span>${r[0] ? `<b>${r[1]}</b>` : `<b>${r[1]}</b> — ${r[2]}`}</span></li>`).join('')}
+          ${extra.map((x, k) => `<li class="ok" style="--k:${rules.length + k}"><i data-lucide="info"></i><span>${x}</span></li>`).join('')}</ul>
+        <p class="small-h">Documents you'll need</p>
+        <ul class="checks">
+          <li class="ok" style="--k:7"><i data-lucide="file-text"></i><span><b>Step 1:</b> summary proposal + concurrence letters from your institutes</span></li>
+          <li class="ok" style="--k:8"><i data-lucide="file-signature"></i><span><b>Step 2:</b> full proposal + letter of interest from the Japanese partner</span></li>
+          <li class="ok" style="--k:9"><i data-lucide="landmark"></i><span><b>If shortlisted:</b> Host Government Concurrence letters</span></li>
+        </ul>`;
+    },
+  });
+})();

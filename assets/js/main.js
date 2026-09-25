@@ -41,7 +41,13 @@
   const io = new IntersectionObserver(es => es.forEach(e => {
     if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
   }), { threshold: .14, rootMargin: '0px 0px -40px 0px' });
-  const watch = (scope = d) => scope.querySelectorAll('.rv:not(.in), .stop:not(.in)').forEach(el => io.observe(el));
+  // clipped headings have no visible area, so watch their parent instead
+  const hio = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.querySelectorAll(':scope > .h2.rv').forEach(h => h.classList.add('in')); hio.unobserve(e.target); }
+  }), { threshold: .1, rootMargin: '0px 0px -40px 0px' });
+  const watch = (scope = d) => scope.querySelectorAll('.rv:not(.in), .stop:not(.in)').forEach(el => {
+    if (el.matches('.h2.rv')) hio.observe(el.parentElement); else io.observe(el);
+  });
   watch();
   window.ISTC.watch = watch;
 
@@ -203,6 +209,30 @@
       el.addEventListener('pointerleave', () => { el.classList.remove('tilting'); el.style.transform = ''; });
     });
   }
+
+
+  // scrollytelling: [data-scrolly] with .sc-step[data-i] cards; sets data-step + cumulative .pN classes
+  d.querySelectorAll('[data-scrolly]').forEach(sc => {
+    const steps = [...sc.querySelectorAll('.sc-step')];
+    const n = steps.length;
+    const dots = sc.querySelector('.sc-dots');
+    if (dots) {
+      dots.innerHTML = steps.map((_, k) => `<button aria-label="Step ${k + 1}"></button>`).join('');
+      [...dots.children].forEach((b, k) => b.addEventListener('click', () => steps[k].scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' })));
+    }
+    const set = i => {
+      if (sc._i === i) return;
+      sc._i = i;
+      sc.dataset.step = i;
+      for (let k = 1; k <= n; k++) sc.classList.toggle('p' + k, k <= i);
+      steps.forEach((s, k) => s.classList.toggle('on', k === i - 1));
+      if (dots) [...dots.children].forEach((b, k) => b.classList.toggle('on', k === i - 1));
+      sc.dispatchEvent(new CustomEvent('scrollystep', { detail: i }));
+    };
+    const io2 = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) set(+e.target.dataset.i); }), { rootMargin: innerWidth < 960 ? '-66% 0px -32% 0px' : '-48% 0px -48% 0px' });
+    steps.forEach((s, k) => { s.dataset.i = k + 1; io2.observe(s); });
+    set(1);
+  });
 
   // footer year
   d.querySelectorAll('[data-year]').forEach(el => { el.textContent = new Date().getFullYear(); });
