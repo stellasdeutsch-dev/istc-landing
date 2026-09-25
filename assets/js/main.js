@@ -143,6 +143,67 @@
   // marquee: duplicate content for a seamless loop
   d.querySelectorAll('.marquee .track').forEach(t => { if (!t.dataset.dup) { t.innerHTML += t.innerHTML; t.dataset.dup = 1; } });
 
+
+  // scroll progress bar
+  const bar = d.querySelector('.progress');
+  if (bar) {
+    const upd = () => { const h = root.scrollHeight - innerHeight; bar.style.transform = `scaleX(${h > 0 ? scrollY / h : 0})`; };
+    addEventListener('scroll', upd, { passive: true }); upd();
+  }
+
+  // rotating word in the hero headline
+  d.querySelectorAll('.rot-in').forEach(el => {
+    const n = el.children.length - 1; // last item repeats the first for a seamless loop
+    if (reduce || n < 1) return;
+    let k = 0;
+    setTimeout(() => {
+      el.classList.add('go');
+      setInterval(() => {
+        k++; el.classList.remove('jump'); el.style.setProperty('--k', k);
+        if (k === n) setTimeout(() => { el.classList.add('jump'); k = 0; el.style.setProperty('--k', 0); }, 850);
+      }, 2400);
+    }, 1400);
+  });
+
+  // gentle snowfall over the hero
+  const cv = d.querySelector('.snow');
+  if (cv && !reduce) {
+    const ctx = cv.getContext('2d');
+    let W = 0, H = 0, flakes = [], on = true;
+    const size = () => {
+      const r = cv.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 2);
+      W = r.width; H = r.height; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const n = Math.round(Math.min(90, W / 14));
+      flakes = Array.from({ length: n }, () => ({ x: Math.random() * W, y: Math.random() * H, r: .8 + Math.random() * 2.2, s: .25 + Math.random() * .6, o: Math.random() * 6.28 }));
+    };
+    size(); addEventListener('resize', size);
+    new IntersectionObserver(es => { on = es[0].isIntersecting; if (on) requestAnimationFrame(tick); }).observe(cv);
+    function tick(t) {
+      if (!on) return;
+      ctx.clearRect(0, 0, W, H);
+      for (const f of flakes) {
+        f.y += f.s; f.x += Math.sin(t / 1400 + f.o) * .35;
+        if (f.y > H + 4) { f.y = -4; f.x = Math.random() * W; }
+        ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, 6.283);
+        ctx.fillStyle = `rgba(160,178,201,${.35 + f.r / 6})`; ctx.fill();
+      }
+      requestAnimationFrame(tick);
+    }
+  }
+
+  // 3D tilt on cards (mouse only)
+  if (!reduce && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    d.querySelectorAll('.tile, .acard, .plan, .node, .hq, .gloss .g').forEach(el => {
+      el.classList.add('tilt');
+      el.addEventListener('pointermove', e => {
+        const b = el.getBoundingClientRect(), x = (e.clientX - b.left) / b.width - .5, y = (e.clientY - b.top) / b.height - .5;
+        el.classList.add('tilting');
+        el.style.transform = `perspective(900px) rotateX(${(-y * 6).toFixed(2)}deg) rotateY(${(x * 8).toFixed(2)}deg) translateY(-4px)`;
+      });
+      el.addEventListener('pointerleave', () => { el.classList.remove('tilting'); el.style.transform = ''; });
+    });
+  }
+
   // footer year
   d.querySelectorAll('[data-year]').forEach(el => { el.textContent = new Date().getFullYear(); });
 })();
